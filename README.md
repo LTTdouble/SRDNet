@@ -1,3 +1,34 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Codespaces
+Marketplace
+Explore
+ 
+@LTTdouble 
+LTTdouble
+/
+SRDNet
+Private
+Cannot fork because you own this repository and are not a member of any organizations.
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+Settings
+SRDNet/README.md.txt
+
+“LTTdouble” first commit
+Latest commit e99ca0c 13 minutes ago
+ History
+ 0 contributors
+71 lines (51 sloc)  3.01 KB
+ 
+
 # SRDNet
 
 This repository is implementation of the ["Hyperspectral Image Super-Resolution via Dual-domain Network Based on Hybrid Convolution"](SRDNet)by PyTorch.
@@ -53,7 +84,7 @@ Citation
 
 	title={Exploring the Relationship between 2D/3D Convolution for Hyperspectral Image Super-Resolution},
 	author={Q. Li, Q. Wang, and X. Li},
-	journal={ IEEE Transactions on Geoscience and Remote Sensing},
+	journal={ IEEE Transactions on Geoscience and Remote Sensing},
 	year={2020},
 	doi={10.1109/TGRS.2020.3047363}
 	}
