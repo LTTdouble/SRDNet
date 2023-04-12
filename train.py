@@ -80,7 +80,7 @@ def main():
     val_loader = DataLoader(dataset=val_set, num_workers=opt.threads, batch_size=1, shuffle=False)
  
     model = SRDNet(opt)
-    weights_init(model)
+    #weights_init(model)
 
     criterion = nn.L1Loss()
     HFL_loss=HFL()
