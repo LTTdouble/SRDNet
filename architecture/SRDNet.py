@@ -188,34 +188,33 @@ class SRDNet(nn.Module):
     def forward(self, x):
   
         CSKC = self.nearest_g(x)
-     
         x1 = self.head(x)
         res1 = self.body1(x1)
-       
         res2 = self.body2( res1)
-        res3 = self.body3(res2)
-
-        res3 = res2 + res3
-        res4 = self.tail(res3)
-
-        res1_1 = self.body1_1(res1)+x
+        res1_1 = self.body1_1(res1+res2)+x
         res1_3D = res1_1.unsqueeze(1)
         res1_3D = self.head_3D(res1_3D)
-
         H = []
+
         for i in range(3):
             res1_3D = self.basic_3D[i](res1_3D,opt.nEpochs)
+            res1_2D=self.end_1( res1_3D)
+            res1_2D =  res1_2D.squeeze(1)
+
             H.append(res1_3D * self.gamma[i])
+
         res1_3D = torch.cat(H, 1)
         res1_3D = self.reduceD(res1_3D)
+        res3 = self.body3(res2+ self.head(res1_2D))
+        res4 = self.tail(res3)
 
         res4_3D = self.tail_3D(res1_3D)
         res4_3D = res4_3D.squeeze(1)
         res4_3D=self.end(res4_3D)
 
         x4 = res4+res4_3D+self.nearest_l(res1)
-      
         x4 = self.body4(x4)
         x4 = self.tail_g(x4)
         x4=x4+CSKC
+   
         return x4
