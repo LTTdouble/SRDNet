@@ -63,10 +63,6 @@ class TVLossSpectral(torch.nn.Module):
         return t.size()[1] * t.size()[2] * t.size()[3]
 
 
-
-
-
-
 class HFL(nn.Module):
     def __init__(self, loss_weight=1.0, alpha=1.0, patch_factor=1, ave_spectrum=False, log_matrix=False, batch_matrix=False):
         super(HFL, self).__init__()
