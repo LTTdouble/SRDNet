@@ -48,19 +48,7 @@ author={T. Liu, Y. Liu, and C. Zhang},
 arXiv:2304.04589 (https://arxiv.org/abs/2304.04589)
 year={2023}
 	}
-  @article{li2020exp,
-title={Exploring the Relationship between 2D/3D Convolution for Hyperspectral Image Super-Resolution},
-author={Q. Li, Q. Wang, and X. Li},
-journal={ IEEE Transactions on Geoscience and Remote Sensing},
-year={2020},
-doi={10.1109/TGRS.2020.3047363}
-}
-@article{tian2022heterogeneous,
-title={A heterogeneous group CNN for image super-resolution},
-author={Tian, Chunwei and Zhang, Yanning and Zuo, Wangmeng and Lin, Chia-Wen and Zhang, David and Yuan, Yixuan},
-journal={arXiv preprint arXiv:2209.12406},
-year={2022}
-}
+
 --------
 
 If you has any questions, please send e-mail to lttdouble@163.com.
