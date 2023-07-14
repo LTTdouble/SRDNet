@@ -8,7 +8,7 @@ parser.add_argument("--nEpochs", type=int, default=300, help="maximum number of 
 parser.add_argument("--show", action="store_true", help="show Tensorboard")
 parser.add_argument('--method', type=str, default='SRDNet')
 parser.add_argument('--pretrained_model_path', type=str, default=None)
-parser.add_argument("--lr", type=int, default=1.1e-4, help="lerning rate")
+parser.add_argument("--lr", type=int, default=1.0e-4, help="lerning rate")
 parser.add_argument("--cuda", help="Use cuda",default=True)
 parser.add_argument("--gpus", default="0", type=str, help="gpu ids (default: 0)")
 parser.add_argument("--threads", type=int, default=8, help="number of threads for dataloader to use")
