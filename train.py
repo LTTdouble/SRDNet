@@ -1,19 +1,12 @@
 # coding:utf-8
 import os
-import torch
 import torch.backends.cudnn as cudnn
-import torch.nn as nn
-import numpy as np
 import torch.optim as optim
-import torchvision
-
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
 import time
 
-from torchvision import transforms
-from option import opt
 from loss import HybridLoss ,HFL
 from torchnet import meter
 from data_utils import TrainsetFromFolder, ValsetFromFolder
@@ -21,13 +14,10 @@ from eval import PSNR
 
 from torch.optim.lr_scheduler import MultiStepLR
 from architecture.common import *
-
 from architecture.SRDNet import SRDNet
-
 import torch.nn.init as init
-from utils import AverageMeter
 import scipy.io as scio
-import copy
+
 psnr = []
 out_path = 'result/' + opt.datasetName + '/'
 
@@ -80,7 +70,7 @@ def main():
     val_loader = DataLoader(dataset=val_set, num_workers=opt.threads, batch_size=1, shuffle=False)
  
     model = SRDNet(opt)
-    #weights_init(model)
+    # weights_init(model)
 
     criterion = nn.L1Loss()
     HFL_loss=HFL()
