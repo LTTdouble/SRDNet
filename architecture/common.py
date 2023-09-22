@@ -1,9 +1,7 @@
 import math
 
-from torch.nn import init as init
 import torch
 import torch.nn as nn
-from torch.nn.modules.batchnorm import _BatchNorm
 from option import opt
 def default_conv(in_channels, out_channels, kernel_size, bias=True):
     wn = lambda x: torch.nn.utils.weight_norm(x)
@@ -215,12 +213,11 @@ class HSL(nn.Module):
         self.max_pool1 = nn.MaxPool2d(3, stride=2, padding=1)
         self.avg_pool1 = nn.AvgPool2d(3, stride=2, padding=1)
         self.spatial_attn = nn.Conv2d(inplanes * 2, inplanes, 1)
-        self.upsample = nn.Upsample(
-            scale_factor=2, mode='bicubic', align_corners=False)
+        self.upsample = nn.Upsample(scale_factor=2, mode='bicubic', align_corners=False)
 
         # self.reset_parameters()
         self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
-        self.ReLU = nn.ReLU(inplace=True)
+        self.ReLU = nn.ReLU(inplace=False)
 
         kaiming_init(self.conv_q_right, mode='fan_in')
         kaiming_init(self.conv_v_right, mode='fan_in')
@@ -234,23 +231,23 @@ class HSL(nn.Module):
                 x (Tensor):Features with shape (b, c, h, w).
 
         Returns:
-            Tensor: Features after TSA with the shape (b, c, h, w).
+            Tensor: Features after HSL with the shape (b, c, h, w).
         # """
         #  spectral attention
         input_x = self.conv_v_right(x)
         batch, channel, height, width = input_x.size()
 
         input_x = input_x.view(batch, channel, height * width)
-        context_mask = self.ReLU(self.conv_q_right(x))
+        context_mask = (self.conv_q_right(x))
         context_mask = context_mask.view(batch, 1, height * width)
         context_mask = self.softmax_right(context_mask)
 
         context = torch.matmul(input_x, context_mask.transpose(1, 2))
         context = context.unsqueeze(-1)
-        context = self.ReLU(self.conv_up(context))
+        context = (self.conv_up(context))
 
-        mask_ch = self.sigmoid(context)
-        x1 = self.conv_x(x)
+        mask_ch = self.ReLU(self.sigmoid(context))
+        x1 = self.ReLU(self.conv_x(x))
         out = x1 * mask_ch+x
 
         # fusion
@@ -286,5 +283,4 @@ class HSL(nn.Module):
         # after initialization, * 2 makes (attn * 2) to be close to 1.
         feat2 =  feat_fusion * attn_out*2+attn_add+out
         return feat2
-
 
