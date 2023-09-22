@@ -90,6 +90,12 @@ class HFL(nn.Module):
 
         return torch.rfft(y, 2, onesided=False, normalized=True)
 
+        # ////// >pytorch 1.71
+
+        # output_new = torch.fft.fft2(y, dim=(-2, -1))
+        # output = torch.stack((output_new.real, output_new.imag), -1)
+        # return output
+
     def loss_formulation(self, recon_freq, real_freq, matrix=None):
 
         if matrix is not None:
