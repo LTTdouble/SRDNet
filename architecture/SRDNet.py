@@ -43,9 +43,9 @@ class IGM(nn.Module):
         self.conv6_1 = nn.Sequential(
             nn.Conv2d(in_channels=features, out_channels=features, kernel_size=kernel_size, padding=padding, groups=1,
                       bias=False))
-        # self.conv7_1 = nn.Sequential(
-        #     nn.Conv2d(in_channels=features, out_channels=features, kernel_size=kernel_size, padding=padding, groups=1,
-        #               bias=False))
+        self.conv7_1 = nn.Sequential(
+             nn.Conv2d(in_channels=features, out_channels=features, kernel_size=kernel_size, padding=padding, groups=1,
+                       bias=False))
 
         self.ReLU = nn.ReLU(inplace=True)
 
