@@ -38,17 +38,4 @@ Result
 |  x4 |  37.982/ 0.981 / 2.659 | 
 |  x8 |  33.854/ 0.950/ 4.435|  
 
-
-Citation 
---------
-**Please consider cite this paper if you find it helpful.**
-
-@article{Hyperspectral Image Super-Resolution via Dual-domain Network Based on Hybrid Convolution},
-author={T. Liu, Y. Liu, and C. Zhang},
-arXiv:2304.04589 (https://arxiv.org/abs/2304.04589)
-year={2023}
-	}
-
---------
-
 If you has any questions, please send e-mail to lttdouble@163.com.
