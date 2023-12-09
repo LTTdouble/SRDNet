@@ -225,6 +225,8 @@ class HSL(nn.Module):
         self.conv_q_right.inited = True
         self.conv_v_right.inited = True
 
+        self.gamma_rnn = nn.Parameter(torch.ones(2))
+
     def forward(self,x):
         """
         Args:
@@ -257,14 +259,14 @@ class HSL(nn.Module):
         attn1 = self.ReLU(self.conv_x(out))
         attn_max = self.max_pool1(attn1)
         attn_avg = self.avg_pool1(attn1)
-        attn2 = torch.cat([attn_max, attn_avg],1)
-        attn2=self.spatial_attn(attn2)
+        attn2 = torch.cat([self.gamma_rnn[0] * attn_max, self.gamma_rnn[1] * attn_avg], 1)
+        attn2 = self.spatial_attn(attn2)
 
         # pyramid levels
         attn_level = self.ReLU(self.conv_x(attn2))
         attn_max = self.max_pool1(attn_level)
         attn_avg = self.avg_pool1(attn_level)
-        attn_level =self.spatial_attn(torch.cat([attn_max, attn_avg],1))
+        attn_level =self.spatial_attn(torch.cat([self.gamma_rnn[0] *attn_max, self.gamma_rnn[1] *attn_avg], 1))
 
         attn_level = self.ReLU(self.conv(attn_level))
         attn_level = self.upsample(attn_level)
