@@ -66,7 +66,7 @@ class TVLossSpectral(torch.nn.Module):
 class HFL(nn.Module):
     def __init__(self, loss_weight=1.0, alpha=1.0, patch_factor=1, ave_spectrum=False, log_matrix=False, batch_matrix=False):
         super(HFL, self).__init__()
-          self.loss_weight = loss_weight
+    self.loss_weight = loss_weight
         self.alpha = alpha
         self.patch_factor = patch_factor
         self.ave_spectrum = ave_spectrum
@@ -89,11 +89,11 @@ class HFL(nn.Module):
 
         y = torch.stack(patch_list, 1)
 
-        #if pytorch<=1.7.1
+        # if pytorch<=1.7.1
         # return torch.rfft(y, 2, onesided=False, normalized=True)
-
-        #if pytorch>1.7.1
-        output_new=torch.fft.rfft2(y, dim=(-2,-1))
+        
+        # if pytorch>1.7.1
+        output_new = torch.fft.rfft2(y, s=None, dim=(-2, -1), norm='backward')
         output=torch.stack((output_new.real,output_new.imag),-1)
         return output
 
@@ -146,7 +146,7 @@ class HFL(nn.Module):
 
         loss_fre = 0.5 * loss_fre_amp + 0.5 * loss_fre_pha
 
-        return self.loss_formulation(pred_freq, target_freq, matrix) * self.loss_weight+loss_fre
+        return 0.2*self.loss_formulation(pred_freq, target_freq, matrix) * self.loss_weight+0.8*loss_fre
 
 class get_Fre(nn.Module):
     def __init__(self):
@@ -159,4 +159,3 @@ class get_Fre(nn.Module):
         dp_pha = torch.angle(dp)
 
         return dp_amp, dp_pha
-
