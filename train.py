@@ -137,7 +137,7 @@ def train(train_loader, optimizer, model, criterion, epoch,HFL_loss):
 
         HFL_loss = HFL_loss(SR, label)
         loss = criterion(SR, label)
-        loss = loss+0.01*HFL_loss
+        loss = loss+0.1*HFL_loss
 
         optimizer.zero_grad()
         loss.backward()
