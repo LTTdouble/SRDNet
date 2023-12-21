@@ -66,14 +66,15 @@ class TVLossSpectral(torch.nn.Module):
 class HFL(nn.Module):
     def __init__(self, loss_weight=1.0, alpha=1.0, patch_factor=1, ave_spectrum=False, log_matrix=False, batch_matrix=False):
         super(HFL, self).__init__()
-        self.loss_weight = loss_weight
+          self.loss_weight = loss_weight
         self.alpha = alpha
         self.patch_factor = patch_factor
         self.ave_spectrum = ave_spectrum
         self.log_matrix = log_matrix
         self.batch_matrix = batch_matrix
 
-        self.fidelity = torch.nn.L1Loss()
+        self.criterion = torch.nn.L1Loss()
+        self.net_getFre = get_Fre()
     def tensor2freq(self, x):
         patch_factor = self.patch_factor
         _, _, h, w = x.shape
@@ -88,13 +89,10 @@ class HFL(nn.Module):
 
         y = torch.stack(patch_list, 1)
 
-        return torch.rfft(y, 2, onesided=False, normalized=True)
-
-        # ////// >pytorch 1.71
-
-        # output_new = torch.fft.fft2(y, dim=(-2, -1))
-        # output = torch.stack((output_new.real, output_new.imag), -1)
-        # return output
+        # return torch.rfft(y, 2, onesided=False, normalized=True)
+        output_new=torch.fft.rfft2(y, dim=(-2,-1))
+        output=torch.stack((output_new.real,output_new.imag),-1)
+        return output
 
     def loss_formulation(self, recon_freq, real_freq, matrix=None):
 
@@ -116,8 +114,8 @@ class HFL(nn.Module):
             weight_matrix = matrix_tmp.clone().detach()
 
         assert weight_matrix.min().item() >= 0 and weight_matrix.max().item() <= 1, (
-            'The values of spectrum weight matrix should be in the range [0, 1], '
-            'but got Min: %.10f Max: %.10f' % (weight_matrix.min().item(), weight_matrix.max().item()))
+                'The values of spectrum weight matrix should be in the range [0, 1], '
+                'but got Min: %.10f Max: %.10f' % (weight_matrix.min().item(), weight_matrix.max().item()))
 
         tmp = (recon_freq - real_freq) ** 2
         freq_distance = tmp[..., 0] + tmp[..., 1]
@@ -127,6 +125,9 @@ class HFL(nn.Module):
 
     def forward(self, pred, target, matrix=None, **kwargs):
 
+        SR_fre =  pred[:, :1, :, :].cuda()
+        gt = target[:, :1, :, :].cuda()
+
         pred_freq = self.tensor2freq(pred)
         target_freq = self.tensor2freq(target)
 
@@ -134,5 +135,25 @@ class HFL(nn.Module):
             pred_freq = torch.mean(pred_freq, 0, keepdim=True)
             target_freq = torch.mean(target_freq, 0, keepdim=True)
 
-        return self.loss_formulation(pred_freq, target_freq, matrix) * self.loss_weight
+        out_amp, out_pha = self.net_getFre(SR_fre)
+        gt_amp, gt_pha = self.net_getFre(gt)
+
+        loss_fre_amp = self.criterion(out_amp, gt_amp)
+        loss_fre_pha = self.criterion(out_pha, gt_pha)
+
+        loss_fre = 0.5 * loss_fre_amp + 0.5 * loss_fre_pha
+
+        return self.loss_formulation(pred_freq, target_freq, matrix) * self.loss_weight+loss_fre
+
+class get_Fre(nn.Module):
+    def __init__(self):
+        super(get_Fre, self).__init__()
+
+    def forward(self, dp):
+
+        dp = torch.fft.rfft2(dp, norm='backward')
+        dp_amp = torch.abs(dp)
+        dp_pha = torch.angle(dp)
+
+        return dp_amp, dp_pha
 
