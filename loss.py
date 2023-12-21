@@ -89,10 +89,10 @@ class HFL(nn.Module):
 
         y = torch.stack(patch_list, 1)
 
-        # pytorch<=1.7.1
+        #if pytorch<=1.7.1
         # return torch.rfft(y, 2, onesided=False, normalized=True)
 
-        # pytorch>1.7.1
+        #if pytorch>1.7.1
         output_new=torch.fft.rfft2(y, dim=(-2,-1))
         output=torch.stack((output_new.real,output_new.imag),-1)
         return output
