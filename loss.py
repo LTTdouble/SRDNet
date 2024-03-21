@@ -64,6 +64,9 @@ class TVLossSpectral(torch.nn.Module):
 
 
 class HFL(nn.Module):
+    """
+    This code heavily borrowes from https://github.com/EndlessSora/focal-frequency-loss
+    """
     def __init__(self, loss_weight=1.0, alpha=1.0, patch_factor=1, ave_spectrum=False, log_matrix=False, batch_matrix=False):
         super(HFL, self).__init__()
         self.loss_weight = loss_weight
