@@ -38,5 +38,5 @@ Result
 |  x4 | 37.872/ 0.9286/ 2.659 | 
 |  x8 |  33.817/ 0.8455/ 4.489|  
 
-This code heavily borrowes from https://github.com/EndlessSora/focal-frequency-loss.
+
 If you has any questions, please send e-mail to lttdouble@163.com.
