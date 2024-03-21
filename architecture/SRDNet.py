@@ -6,10 +6,7 @@ import torch.nn.functional as F
 from option import opt
 
 class IGM(nn.Module):
-    """
-     This code heavily borrowes from https: https://github.com/hellloxiaotian/HGSRCNN
-    """
-    
+   
     def __init__(self, in_channels, out_channels, gropus=1):
         super(IGM, self).__init__()
         kernel_size = 3
